@@ -4,6 +4,20 @@ Mini API de loja usada no Direto ao Ponto **Testes e correção de bugs com IA**
 
 Stack: Node 24 · TypeScript · Express · SQLite (`node:sqlite`, SQL puro) · Vitest · Supertest
 
+## Para acompanhar a aula: baixe a versão inicial
+
+A branch `main` já tem a versão final (com testes e bugs corrigidos). Para praticar desde o início, baixe a **primeira versão** do projeto, sem testes:
+
+- **Download (.zip):** [versão inicial](https://github.com/treinaweb/treinaweb-dp-ia-testes/archive/6c0d1dfcececf542f717c5551e4a256742945e85.zip)
+- **Ver no GitHub:** [commit "Projeto exemplo"](https://github.com/treinaweb/treinaweb-dp-ia-testes/tree/6c0d1dfcececf542f717c5551e4a256742945e85)
+- **Via git:**
+
+  ```bash
+  git clone https://github.com/treinaweb/treinaweb-dp-ia-testes.git
+  cd treinaweb-dp-ia-testes
+  git checkout 6c0d1df
+  ```
+
 ## Rodando
 
 ```bash
