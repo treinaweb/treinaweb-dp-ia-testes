@@ -1,5 +1,10 @@
 export type ItemCalculo = { preco: number; quantidade: number };
-export type Cupom = { codigo: string; percentual: number; validade: string };
+export type Cupom = {
+  codigo: string;
+  percentual: number;
+  validade: string;
+  minimo?: number | null; // valor mínimo de subtotal; ausente/null = sem mínimo
+};
 
 export type Resumo = {
   subtotal: number;
@@ -12,6 +17,10 @@ export const VALOR_FRETE = 15;
 export const FRETE_GRATIS_A_PARTIR_DE = 100;
 
 const arredondar = (valor: number) => Math.round(valor * 100) / 100;
+
+// Valor monetário no formato brasileiro, ex.: 150 -> "150,00"
+const formatarMoeda = (valor: number) =>
+  valor.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
 // Datas no formato AAAA-MM-DD
 export function formatarData(data: Date): string {
@@ -48,10 +57,13 @@ export function calcularTotal(
     if (!cupomValido(cupom, hoje)) {
       throw new Error('Cupom expirado');
     }
+    if (cupom.minimo != null && subtotal < cupom.minimo) {
+      throw new Error(`Pedido mínimo de R$ ${formatarMoeda(cupom.minimo)} para este cupom`);
+    }
     desconto = arredondar(subtotal * (cupom.percentual / 100));
   }
 
-  const frete = subtotal > FRETE_GRATIS_A_PARTIR_DE ? 0 : VALOR_FRETE;
+  const frete = subtotal >= FRETE_GRATIS_A_PARTIR_DE ? 0 : VALOR_FRETE;
   const total = arredondar(subtotal - desconto + frete);
 
   return { subtotal, desconto, frete, total };

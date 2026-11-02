@@ -22,15 +22,18 @@ export function criarApp(db: DatabaseSync) {
 
     const buscarProduto = db.prepare('SELECT * FROM produtos WHERE id = ?');
     const itensCalculo = [];
+    const quantidadePorProduto = new Map<number, number>();
 
     for (const item of itens) {
       const produto = buscarProduto.get(item.produtoId) as Produto | undefined;
       if (!produto) {
         return res.status(404).json({ erro: `Produto ${item.produtoId} não encontrado` });
       }
-      if (produto.estoque < item.quantidade) {
+      const quantidadeTotal = (quantidadePorProduto.get(item.produtoId) ?? 0) + item.quantidade;
+      if (produto.estoque < quantidadeTotal) {
         return res.status(400).json({ erro: `Estoque insuficiente para ${produto.nome}` });
       }
+      quantidadePorProduto.set(item.produtoId, quantidadeTotal);
       itensCalculo.push({ preco: produto.preco, quantidade: item.quantidade });
     }
 
